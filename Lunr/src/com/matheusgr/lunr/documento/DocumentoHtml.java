@@ -1,6 +1,5 @@
 package com.matheusgr.lunr.documento;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -17,14 +16,10 @@ import biblitex.TransformaTexto;
  * Os metadados são obtidos de características do documento, mas de detalhes
  * descritos na tag HEAD.
  */
-class DocumentoHtml implements Documento {
+class DocumentoHtml extends DocumentoAbstract {
 
 	private static final String HEAD_METADADO = "HEAD";
-	private String id;
-	private String original;
-	private String limpo;
 	private Map<String, String> metadados;
-	private String[] split;
 
 	/**
 	 * Construtor padrão. Realiza o processamento de extração do HTML.
@@ -33,38 +28,18 @@ class DocumentoHtml implements Documento {
 	 * @param original HTML do documento a ser criado.
 	 */
 	public DocumentoHtml(String id, String original) {
-		this.id = id;
-		this.original = original;
+		super(id, original, limpo(original));
+	}
+	
+	private static String limpo(String original) {
 		var transformaTexto = new TransformaTexto();
-		var txt = transformaTexto.transforma(TransformaTexto.Algoritmos.html, original);
-		this.limpo = transformaTexto.transforma(TransformaTexto.Algoritmos.clean, txt).strip();
-	}
-
-	@Override
-	public double metricaTextoUtil() {
-		long extractedSize = (new TransformaTexto()).transforma(TransformaTexto.Algoritmos.cleanSpaces, this.limpo)
-				.length();
-		return (1.0 * extractedSize) / this.original.length();
-	}
-
-	@Override
-	public String getId() {
-		return this.id;
-	}
-
-	@Override
-	public String[] getTexto() {
-		if (this.split == null) {
-			this.split = (new TransformaTexto()).transforma(TransformaTexto.Algoritmos.cleanLines, this.limpo)
-					.split(" ");
-			Arrays.sort(this.split);
-		}
-		return this.split;
+		String txt = transformaTexto.transforma(TransformaTexto.Algoritmos.html, original);
+		return transformaTexto.transforma(TransformaTexto.Algoritmos.clean, txt).strip();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(super.getId());
 	}
 
 	@Override
@@ -76,13 +51,13 @@ class DocumentoHtml implements Documento {
 		if (getClass() != obj.getClass())
 			return false;
 		DocumentoHtml other = (DocumentoHtml) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(super.getId(), other.getId());
 	}
 
 	@Override
 	public String toString() {
-		return "===" + this.id + System.lineSeparator() + this.getMetadados().get(HEAD_METADADO)
-				+ System.lineSeparator() + "===" + this.limpo;
+		return "===" + super.getId() + System.lineSeparator() + this.getMetadados().get(HEAD_METADADO)
+				+ System.lineSeparator() + "===" + super.getLimpo();
 	}
 
 	@Override
@@ -90,9 +65,9 @@ class DocumentoHtml implements Documento {
 		if (this.metadados != null) {
 			return this.metadados;
 		}
-		this.metadados = extractHead(this.original);
-		this.metadados.put("LINHAS", "" + this.original.chars().filter((value) -> '\n' == value).count());
-		this.metadados.put("TAMANHO", "" + this.limpo.length());
+		this.metadados = extractHead(super.getOriginal());
+		this.metadados.put("LINHAS", "" + super.getOriginal().chars().filter((value) -> '\n' == value).count());
+		this.metadados.put("TAMANHO", "" + super.getLimpo().length());
 		this.metadados.put("METADATADATE", "" + System.currentTimeMillis());
 		this.metadados.put("TIPO", "" + "html");
 		return this.metadados;
@@ -105,7 +80,7 @@ class DocumentoHtml implements Documento {
 	 */
 	private Map<String, String> extractHead(String original2) {
 		Map<String, String> metadados2 = new HashMap<>();
-		metadados2.put("BRUTE_TAGS", "" + this.original.chars().filter((value) -> '<' == value).count());
+		metadados2.put("BRUTE_TAGS", "" + super.getOriginal().chars().filter((value) -> '<' == value).count());
 		String meta = "";
 		int headStart = original2.toLowerCase().indexOf("<head>");
 		if (headStart != -1) {

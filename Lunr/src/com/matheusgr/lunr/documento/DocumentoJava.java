@@ -1,6 +1,5 @@
 package com.matheusgr.lunr.documento;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -11,13 +10,9 @@ import biblitex.TransformaTexto;
  * Documento base java. As palavras-chave da linguagem ainda são preservadas
  * (como public, private, etc), mas elimina-se documentação e comentários.
  */
-class DocumentoJava implements Documento {
+class DocumentoJava extends DocumentoAbstract {
 
-	private String id;
-	private String original;
-	private String limpo;
 	private Map<String, String> metadados;
-	private String[] split;
 
 	/**
 	 * Cria o DocumentoJava, extraindo o texot base.
@@ -26,38 +21,18 @@ class DocumentoJava implements Documento {
 	 * @param original Código java original.
 	 */
 	public DocumentoJava(String id, String original) {
-		this.id = id;
-		this.original = original;
+		super(id, original, limpo(original));
+	}
+	
+	private static String limpo(String original) {
 		var transformaTexto = new TransformaTexto();
-		var txt = transformaTexto.transforma(TransformaTexto.Algoritmos.java, original);
-		this.limpo = transformaTexto.transforma(TransformaTexto.Algoritmos.clean, txt).strip();
-	}
-
-	@Override
-	public double metricaTextoUtil() {
-		long extractedSize = (new TransformaTexto()).transforma(TransformaTexto.Algoritmos.cleanSpaces, this.limpo)
-				.length();
-		return (1.0 * extractedSize) / this.original.length();
-	}
-
-	@Override
-	public String getId() {
-		return this.id;
-	}
-
-	@Override
-	public String[] getTexto() {
-		if (this.split == null) {
-			this.split = (new TransformaTexto()).transforma(TransformaTexto.Algoritmos.cleanLines, this.limpo)
-					.split(" ");
-			Arrays.sort(this.split);
-		}
-		return this.split;
+		String txt = transformaTexto.transforma(TransformaTexto.Algoritmos.java, original);
+		return transformaTexto.transforma(TransformaTexto.Algoritmos.clean, txt).strip();
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(super.getId());
 	}
 
 	@Override
@@ -69,12 +44,12 @@ class DocumentoJava implements Documento {
 		if (getClass() != obj.getClass())
 			return false;
 		DocumentoJava other = (DocumentoJava) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(super.getId(), other.getId());
 	}
 
 	@Override
 	public String toString() {
-		return "===" + this.id + System.lineSeparator() + this.limpo;
+		return "===" + super.getId() + System.lineSeparator() + super.getLimpo();
 	}
 
 	@Override
@@ -82,9 +57,9 @@ class DocumentoJava implements Documento {
 		if (this.metadados != null) {
 			return this.metadados;
 		}
-		this.metadados = extractData(this.original);
-		this.metadados.put("LINHAS", "" + this.original.chars().filter((value) -> '\n' == value).count());
-		this.metadados.put("TAMANHO", "" + this.limpo.length());
+		this.metadados = extractData(super.getOriginal());
+		this.metadados.put("LINHAS", "" + super.getOriginal().chars().filter((value) -> '\n' == value).count());
+		this.metadados.put("TAMANHO", "" + super.getOriginal().length());
 		this.metadados.put("METADATADATE", "" + System.currentTimeMillis());
 		this.metadados.put("TIPO", "" + "java");
 		return this.metadados;
@@ -95,8 +70,8 @@ class DocumentoJava implements Documento {
 	 */
 	private Map<String, String> extractData(String original2) {
 		Map<String, String> metadados2 = new HashMap<>();
-		metadados2.put("IMPORTS", "" + ((this.limpo.length() - this.limpo.replaceAll("import ", "").length()) / 7));
-		metadados2.put("AUTHOR", "" + (this.original.indexOf("@author") != -1 ? "TRUE" : ""));
+		metadados2.put("IMPORTS", "" + ((super.getOriginal().length() - super.getOriginal().replaceAll("import ", "").length()) / 7));
+		metadados2.put("AUTHOR", "" + (super.getOriginal().indexOf("@author") != -1 ? "TRUE" : ""));
 		return metadados2;
 	}
 
