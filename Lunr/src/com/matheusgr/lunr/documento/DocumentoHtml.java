@@ -19,7 +19,6 @@ import biblitex.TransformaTexto;
 class DocumentoHtml extends DocumentoAbstract {
 
 	private static final String HEAD_METADADO = "HEAD";
-	private Map<String, String> metadados;
 
 	/**
 	 * Construtor padrão. Realiza o processamento de extração do HTML.
@@ -62,15 +61,16 @@ class DocumentoHtml extends DocumentoAbstract {
 
 	@Override
 	public Map<String, String> getMetadados() {
-		if (this.metadados != null) {
-			return this.metadados;
+		Map<String, String> metadados = super.getMetadado();
+		if (metadados != null) {
+			return metadados;
 		}
-		this.metadados = extractHead(super.getOriginal());
-		this.metadados.put("LINHAS", "" + super.getOriginal().chars().filter((value) -> '\n' == value).count());
-		this.metadados.put("TAMANHO", "" + super.getLimpo().length());
-		this.metadados.put("METADATADATE", "" + System.currentTimeMillis());
-		this.metadados.put("TIPO", "" + "html");
-		return this.metadados;
+		metadados = extractHead(super.getOriginal());
+		metadados.put("LINHAS", "" + super.getOriginal().chars().filter((value) -> '\n' == value).count());
+		metadados.put("TAMANHO", "" + super.getLimpo().length());
+		metadados.put("METADATADATE", "" + System.currentTimeMillis());
+		metadados.put("TIPO", "" + "html");
+		return metadados;
 	}
 
 	/*

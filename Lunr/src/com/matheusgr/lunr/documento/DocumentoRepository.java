@@ -2,6 +2,7 @@ package com.matheusgr.lunr.documento;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -67,6 +68,24 @@ class DocumentoRepository {
 		return this.documentos.values().stream()
 					.filter((x) -> Arrays.binarySearch(x.getTexto(), termo) > 0)
 					.collect(Collectors.toSet());
+	}
+	
+	public Set<Documento> busca(Map<String, String> metadados) {
+		Set<Documento> retorno = new HashSet<>();
+		for (Documento documento : this.documentos.values()) {
+			int cont = 0;
+			for (String metadado : documento.getMetadados().keySet()) {
+				if (metadados.containsKey(metadado)) {
+					if (metadados.get(metadado).equals(documento.getMetadados().get(metadado))) {
+						cont+=1;
+					}
+				}
+			}
+			if (cont==metadados.size()) {
+				retorno.add(documento);
+			}
+		}
+		return retorno;
 	}
 
 }

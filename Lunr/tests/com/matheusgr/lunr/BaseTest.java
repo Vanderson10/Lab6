@@ -10,6 +10,8 @@ class BaseTest {
 
 	public static final String TEXTO1_ID = "789";
 	public static final String TEXTO2_ID = "ABC";
+	public static final String TEXTO3_ID = "ATY";
+	public static final String TEXTO4_ID = "VAN";
 	public static final String JAVA_ID = "456";
 	public static final String HTML_ID = "123";
 	
@@ -26,8 +28,10 @@ class BaseTest {
 		var exemplo = new DocumentoExemplos();
 		this.documentoController.adicionaDocumentoHtml(HTML_ID, exemplo.sampleHTML());
 		this.documentoController.adicionaDocumentoJava(JAVA_ID, exemplo.sampleJava());
-		this.documentoController.adicionaDocumentoTxt(TEXTO1_ID, "um arquivo! texto simples.\r\nuse DUAS linhas apenas.");
-		this.documentoController.adicionaDocumentoTxt(TEXTO2_ID, "um arquivo! texto simples.\r\nuse TRÊS linhas agora.\r\nMAIS AVANÇO!");
+		this.documentoController.adicionaDocumentoTxt(TEXTO1_ID, "Uma casa feliz é uma casa bonita");
+		this.documentoController.adicionaDocumentoTxt(TEXTO2_ID, "Um dia feliz é um bom dia");
+		this.documentoController.adicionaDocumentoTxt(TEXTO3_ID, "um arquivo! texto simples.\r\nuse DUAS linhas apenas.");
+		this.documentoController.adicionaDocumentoTxt(TEXTO4_ID, "um arquivo! texto simples.\r\nuse TRÊS linhas agora.\r\nMAIS AVANÇO!");
 	}
 	
 }

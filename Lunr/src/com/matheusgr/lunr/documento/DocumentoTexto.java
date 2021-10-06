@@ -11,8 +11,6 @@ import biblitex.TransformaTexto;
  * metadados próprios.
  */
 class DocumentoTexto extends DocumentoAbstract{
-	
-	private Map<String, String> metadados;
 
 	/**
 	 * Construtor padrão do documento de texto.
@@ -51,15 +49,16 @@ class DocumentoTexto extends DocumentoAbstract{
 
 	@Override
 	public Map<String, String> getMetadados() {
-		if (this.metadados != null) {
-			return this.metadados;
+		Map<String, String> metadados = super.getMetadado();
+		if (metadados != null) {
+			return metadados;
 		}
-		this.metadados = new HashMap<String, String>();
-		this.metadados.put("LINHAS", "" + super.getOriginal().chars().filter((value) -> '\n' == value).count());
-		this.metadados.put("TAMANHO", "" + super.getLimpo().length());
-		this.metadados.put("METADATADATE", "" + System.currentTimeMillis());
-		this.metadados.put("TIPO", "" + "txt");
-		return this.metadados;
+		metadados = new HashMap<String, String>();
+		metadados.put("LINHAS", "" + super.getOriginal().chars().filter((value) -> '\n' == value).count());
+		metadados.put("TAMANHO", "" + super.getLimpo().length());
+		metadados.put("METADATADATE", "" + System.currentTimeMillis());
+		metadados.put("TIPO", "" + "txt");
+		return metadados;
 	}
 
 }

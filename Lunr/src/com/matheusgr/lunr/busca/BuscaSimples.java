@@ -20,7 +20,7 @@ import com.matheusgr.lunr.documento.DocumentoService;
  * Os documentos que não tem nenhum dos termos pesquisados, não devem ser
  * retornados.
  */
-class BuscaSimples {
+class BuscaSimples implements Busca{
 
 	private String[] termos;
 
@@ -46,6 +46,7 @@ class BuscaSimples {
 	 * @return Mapa com os documentos encontrados e o fator de relevância de cada
 	 *         operação.
 	 */
+	@Override
 	public Map<Documento, Integer> busca(DocumentoService ds) {
 		Map<Documento, Integer> respostaDocumento = new HashMap<>();
 		for (String termo : this.termos) {
@@ -65,6 +66,7 @@ class BuscaSimples {
 	 * @return Descrição da busca, onde cada linha representa um parâmetro de busca
 	 *         e as colunas representam um detelhamento de cada parâmetro.
 	 */
+	@Override
 	public String[][] descreveConsulta() {
 		String[][] resultado = new String[this.termos.length][];
 		for (int i = 0; i < resultado.length; i++) {

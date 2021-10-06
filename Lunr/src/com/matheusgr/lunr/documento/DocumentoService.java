@@ -131,5 +131,9 @@ public class DocumentoService {
 	public Set<Documento> busca(String termo) {
 		return this.dr.busca(termo);
 	}
+	
+	public Set<Documento> busca(Map<String, String> metadados) {
+		return this.dr.busca(metadados);
+	}
 
 }

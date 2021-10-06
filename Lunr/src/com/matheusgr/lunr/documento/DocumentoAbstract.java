@@ -1,6 +1,7 @@
 package com.matheusgr.lunr.documento;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import biblitex.TransformaTexto;
@@ -11,12 +12,12 @@ public abstract class DocumentoAbstract implements Documento{
 	private String original;
 	private String limpo;
 	private String[] split;
+	private Map<String, String> metadados;
 	
 	public DocumentoAbstract(String id, String original, String limpo) {
 		this.id = id;
 		this.original = original;
 		this.limpo = limpo;
-		
 	}
 
 	@Override
@@ -53,6 +54,10 @@ public abstract class DocumentoAbstract implements Documento{
 	
 	public String getLimpo() {
 		return this.limpo;
+	}
+	
+	public Map<String, String> getMetadado(){
+		return this.metadados;
 	}
 
 }

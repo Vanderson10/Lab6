@@ -43,10 +43,10 @@ public class BuscaService {
 	 * @param buscaSimples Busca a ser realizada.
 	 * @return Resultado das buscas.
 	 */
-	public DocumentoDTO[] busca(BuscaSimples buscaSimples) {
-		Map<Documento, Integer> respostaDocumento = buscaSimples.busca(this.ds);
+	public DocumentoDTO[] busca(Busca busca) {
+		Map<Documento, Integer> respostaDocumento = busca.busca(this.ds);
 		DocumentoDTO[] documentos = ordena(respostaDocumento);
-		this.br.adicionaBusca(buscaSimples, documentos);
+		this.br.adicionaBusca(busca, documentos);
 		return documentos;
 	}
 

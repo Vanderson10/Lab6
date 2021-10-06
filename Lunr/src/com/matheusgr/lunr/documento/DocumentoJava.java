@@ -12,8 +12,6 @@ import biblitex.TransformaTexto;
  */
 class DocumentoJava extends DocumentoAbstract {
 
-	private Map<String, String> metadados;
-
 	/**
 	 * Cria o DocumentoJava, extraindo o texot base.
 	 * 
@@ -54,15 +52,16 @@ class DocumentoJava extends DocumentoAbstract {
 
 	@Override
 	public Map<String, String> getMetadados() {
-		if (this.metadados != null) {
-			return this.metadados;
+		Map<String, String> metadados = super.getMetadado();
+		if (metadados != null) {
+			return metadados;
 		}
-		this.metadados = extractData(super.getOriginal());
-		this.metadados.put("LINHAS", "" + super.getOriginal().chars().filter((value) -> '\n' == value).count());
-		this.metadados.put("TAMANHO", "" + super.getOriginal().length());
-		this.metadados.put("METADATADATE", "" + System.currentTimeMillis());
-		this.metadados.put("TIPO", "" + "java");
-		return this.metadados;
+		metadados = extractData(super.getOriginal());
+		metadados.put("LINHAS", "" + super.getOriginal().chars().filter((value) -> '\n' == value).count());
+		metadados.put("TAMANHO", "" + super.getOriginal().length());
+		metadados.put("METADATADATE", "" + System.currentTimeMillis());
+		metadados.put("TIPO", "" + "java");
+		return metadados;
 	}
 
 	/*

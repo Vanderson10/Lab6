@@ -57,8 +57,8 @@ public class BuscaController {
 	 * @return Array com DocumentoDTO. Não há ordenação definida.
 	 */
 	public DocumentoDTO[] busca(Map<String, String> metadados) {
-		// TODO
-		throw new UnsupportedOperationException("TODO");
+		this.bv.valida(metadados);
+		return this.bs.busca(new BuscaAvancada(metadados));
 	}
 
 	/**

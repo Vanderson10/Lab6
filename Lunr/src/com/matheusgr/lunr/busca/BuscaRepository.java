@@ -32,12 +32,12 @@ class BuscaRepository {
 	 * @param buscaSimples Operação de busca realizada.
 	 * @param documentos   Documentos resultantes dessa busca.
 	 */
-	public void adicionaBusca(BuscaSimples buscaSimples, DocumentoDTO[] documentos) {
+	public void adicionaBusca(Busca busca, DocumentoDTO[] documentos) {
 		String[] ids = Stream.of(documentos)
 			.map(DocumentoDTO::getId)
 			.collect(Collectors.toList())
 			.toArray(new String[] {});
-		this.buscas.add(new HistoricoBusca(buscaSimples, ids));
+		this.buscas.add(new HistoricoBusca(busca, ids));
 	}
 
 	/**

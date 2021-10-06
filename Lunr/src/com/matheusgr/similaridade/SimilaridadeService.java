@@ -2,6 +2,12 @@ package com.matheusgr.similaridade;
 
 import com.matheusgr.lunr.documento.DocumentoService;
 
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
+import com.matheusgr.lunr.documento.Documento;
+
 /**
  * Componente para tratamento da lógica de negócio relativa a similaridade.
  */
@@ -40,14 +46,40 @@ public class SimilaridadeService {
 	 *         semelhança entre os documentos.
 	 */
 	public double similaridade(String docId1, String docId2) {
-		this.documentoService.recuperaDocumento(docId1);
+		Set<String> termos1 = new HashSet<>();
+		Set<String> termos2 = new HashSet<>();
+		Set<String> termos11 = new HashSet<>();
+		Set<String> termos22 = new HashSet<>();
 		// PEGA DOCUMENTO 1
+		Optional<Documento> documento1 = this.documentoService.recuperaDocumento(docId1);
 		// PEGA DOCUMENTO 2
+		Optional<Documento> documento2 = this.documentoService.recuperaDocumento(docId2);
 		// COLOCA TERMOS DO DOCUMENTO 1 EM UM CONJUNTO
+		if (documento1.isPresent()) {
+			termos1 = iterarTermos(documento1.get()); 
+			termos11 = iterarTermos(documento1.get());
+		}
 		// COLOCA TERMOS DO DOCUMENTO 2 EM OUTRO CONJUNTO
+		if (documento2.isPresent()) {
+			termos2 = iterarTermos(documento2.get());
+			termos22 = iterarTermos(documento2.get());
+		}
 		// A SIMILARIDADE É DETERMINADA PELO...
 		// --> (TAMANHO DA INTERSEÇÃO) / (TAMANHO DA UNIÃO DOS CONJUNTOS)
-		throw new UnsupportedOperationException();
+		termos1.retainAll(termos2);
+		double intersecao = termos1.size();
+		termos11.removeAll(termos22);
+		double uniao = termos11.size()+termos22.size();
+		return intersecao/uniao;
+	}
+	
+	private Set<String> iterarTermos(Documento documento){
+		Set<String> conjunto = new HashSet<>();
+		String[] termos = documento.getTexto();
+		for (String termo : termos) {
+			conjunto.add(termo);
+		}
+		return conjunto;
 	}
 
 }
